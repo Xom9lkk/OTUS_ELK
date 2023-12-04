@@ -23,9 +23,9 @@ docker pull -q mysql/mysql-server:8.0 #скачиваем образ MySQL
 docker run -d --name=slave_mysql --hostname=slave -v $PWD/d1:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=mypass mysql/mysql-server:8.0 --server-id=2  #запускаем контейнер со слейвом
 echo "Устанавливаем Java"
 dnf install -q -y java #устнавливаем java-openjdk
-echo "Slave установлен"
-echo "Установаем Elasticsearch"
+echo "Устанавливаем Elasticsearch"
 rpm --install elasticsearch-8.9.2-x86_64.rpm  #устанавливаем еластик
+cp ./jvm.options /etc/elasticsearch/jvm.options.d
 systemctl daemon-reload #обновляем конфигурацию
 systemctl start elasticsearch #стартуем эластик
 systemctl enable --now elasticsearch.service #добавляем еластик в автозагрузку
