@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Изменяем hostname VM"
-hostnamectl set-hostname slave #название устройства
+hostnamectl set-hostname elk-stack #название устройства
 systemctl restart systemd-hostnamed #перезапускаем службу
 echo "Отключаем стандартный Firewall"
 systemctl disable firewalld #удаляем из автозагрузки firewalld
@@ -10,6 +10,9 @@ dnf install -q -y iptables-services #устанавливаем iptables
 cp ./iptables /etc/sysconfig/iptables #копируем настройки фаерволла
 systemctl restart iptables #рестартуем фаерволл
 systemctl enable iptables #включаем в автозагрузку
+echo "Корректируем м сетевые настройки"
+cp ./enp0s3.nmconnection /etc/NetworkManager/system-connections #копируем настройки сервера
+systemctl restart NetworkManager #рестартуем сетевую службу
 echo "Выключение Selinux"
 sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config  #изменяем положение селинукс
 setenforce 0 #выключаем селинукс
@@ -20,9 +23,6 @@ sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/dock
 sudo yum install -q -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin #добавление репозитория
 systemctl start docker #стартуем докер
 systemctl enable docker #включаем докер в автозагрузку
-echo "Ставим slave MySQL"
-docker pull -q mysql/mysql-server:8.0 #скачиваем образ MySQL
-docker run -d --name=slave_mysql --hostname=slave -v $PWD/d1:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=mypass mysql/mysql-server:8.0 --server-id=2  #запускаем контейнер со слейвом
 echo "Устанавливаем Java"
 dnf install -q -y java #устнавливаем java-openjdk
 echo "Устанавливаем Elasticsearch"
