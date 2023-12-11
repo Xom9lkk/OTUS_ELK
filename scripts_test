@@ -1,0 +1,42 @@
+#!/bin/bash
+echo "Изменяем hostname VM"
+hostnamectl set-hostname elk-stack #название устройства
+systemctl restart systemd-hostnamed #перезапускаем службу
+echo "Устанавливаем статический IP адрес"
+nmcli connection show
+nmcli con add type ethernet con-name 'static-ip' ifname enp0s3 ipv4.method manual ipv4.addresses 192.168.0.105/24 gw4 192.168.0.1
+nmcli con mod static-ip ipv4.dns 8.8.8.8
+nmcli con up id 'static-ip'
+echo "Применяем правила IPTABLES"
+bash ./rules.v4
+sudo apt install default-jdk -y
+echo "Устанавливаем Elasticsearch"
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.9.1-amd64.deb
+sudo dpkg -i elasticsearch-8.9.1-amd64.deb
+systemctl daemon-reload #обновляем конфигурацию
+systemctl start elasticsearch #стартуем эластик
+systemctl enable --now elasticsearch.service #добавляем еластик в автозагрузку
+cp ./jvm.options /etc/elasticsearch/jvm.options.d
+cp ./elasticsearch.yml /etc/elasticsearch/ #копируем наши настройки эластика 
+systemctl daemon-reload #обновляем конфигурацию
+systemctl restart elasticsearch #рестартуем еластик 
+curl http://localhost:9200 #курлим эластик
+echo "Установливаем Kibana"
+wget https://artifacts.elastic.co/downloads/kibana/kibana-8.9.1-amd64.deb
+dpkg -i kibana-8.9.1-amd64.deb #устанавливаем кибану
+systemctl daemon-reload #обновляем конфигурацию
+systemctl enable --now kibana.service #добавляем кибану в автозагрузку
+cp ./kibana.yml /etc/kibana/kibana.yml #копируем настройки кибаны в директорию
+systemctl restart kibana #рестартуем кибану
+echo "Установливаем Logstash"
+wget https://artifacts.elastic.co/downloads/logstash/logstash-8.9.1-amd64.deb
+sudo dpkg -i elasticsearch-8.9.1-amd64.deb #устанавливаем логсташ
+systemctl enable --now logstash.service #добавляем логсташ в автозагрузку
+cp ./logstash.yml /etc/logstash/logstash.yml #копируем настройки логсташ в директорию
+cp ./logstash-nginx-es.conf /etc/logstash/conf.d/logstash-nginx-es.conf #копируем настройки логсташ в директорию
+systemctl restart logstash.service #рестартуем логсташ
+echo "Установливаем Filebeat"
+wget https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-8.9.1-amd64.deb
+dpkg -i filebeat-8.9.1-amd64.deb  #устанавливаем битс
+cp ./filebeat.yml /etc/filebeat/filebeat.yml #копируем настройки битса в директорию
+systemctl restart filebeat #рестартуем битс
