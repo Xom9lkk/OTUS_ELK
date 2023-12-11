@@ -10,13 +10,13 @@ nmcli con up id 'static-ip'
 echo "Применяем правила IPTABLES"
 bash ./rules.v4
 sudo apt install default-jdk -y
-cp ./elk-deb/elasticsearch-8.9.1-amd64.deb ~/OTUS_ELK
-cp ./elk-deb/kibana-8.9.1-amd64.deb ~/OTUS_ELK
-cp ./elk-deb/filebeat-8.9.1-amd64.deb ~/OTUS_ELK
-cp ./elk-deb/heartbeat-8.9.1-amd64.deb ~/OTUS_ELK
-cp ./elk-deb/logstash-8.9.1-amd64.deb ~/OTUS_ELK
-cp ./elk-deb/metricbeat-8.9.1-amd64.deb ~/OTUS_ELK
-cp ./elk-deb/packetbeat-8.9.1-amd64.deb ~/OTUS_ELK
+cp ~/elk-deb/elasticsearch-8.9.1-amd64.deb ~/OTUS_ELK
+cp ~/elk-deb/kibana-8.9.1-amd64.deb ~/OTUS_ELK
+cp ~/elk-deb/filebeat-8.9.1-amd64.deb ~/OTUS_ELK
+cp ~/elk-deb/heartbeat-8.9.1-amd64.deb ~/OTUS_ELK
+cp ~/elk-deb/logstash-8.9.1-amd64.deb ~/OTUS_ELK
+cp ~/elk-deb/metricbeat-8.9.1-amd64.deb ~/OTUS_ELK
+cp ~/elk-deb/packetbeat-8.9.1-amd64.deb ~/OTUS_ELK
 echo "Устанавливаем Elasticsearch"
 sudo dpkg -i elasticsearch-8.9.1-amd64.deb
 systemctl daemon-reload #обновляем конфигурацию
