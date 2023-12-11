@@ -84,7 +84,7 @@ path.data: /var/lib/logstash
 #
 # Where to fetch the pipeline configuration for the main pipeline
 #
-path.config: /etc/logstash/conf.d
+# path.config:
 #
 # Pipeline configuration string for the main pipeline
 #
@@ -115,7 +115,6 @@ path.config: /etc/logstash/conf.d
 # pipeline configuration files.
 #
 # config.support_escapes: false
-#
 # ------------ API Settings -------------
 # Define settings related to the HTTP API here.
 #
@@ -377,3 +376,6 @@ path.logs: /var/log/logstash
 # https://www.elastic.co/guide/en/logstash/current/plugins-filters-geoip.html#plugins-filters-geoip-manage_update
 #xpack.geoip.download.endpoint: "https://geoip.elastic.co/v1/database"
 #xpack.geoip.downloader.enabled: true
+
+
+
