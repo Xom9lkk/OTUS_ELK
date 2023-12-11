@@ -29,7 +29,7 @@ filebeat.inputs:
 
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
-    - /var/log/nginx/*.log
+    - /var/log/apache2/*.log
     #- c:\programdata\elasticsearch\logs\*
   
   exclude_files: ['.gz$']
@@ -138,9 +138,9 @@ setup.kibana:
 # Configure what output to use when sending the data collected by the beat.
 
 # ---------------------------- Elasticsearch Output ----------------------------
-#output.elasticsearch:
+output.elasticsearch:
   # Array of hosts to connect to.
-#  hosts: ["localhost:9200"]
+  hosts: ["localhost:9200"]
 
   # Protocol - either `http` (default) or `https`.
   #protocol: "https"
@@ -151,9 +151,9 @@ setup.kibana:
   #password: "changeme"
 
 # ------------------------------ Logstash Output -------------------------------
-output.logstash:
+#output.logstash:
   # The Logstash hosts
-  hosts: ["localhost:5400"]
+  #hosts: ["localhost:5400"]
 
   # Optional SSL. By default is off.
   # List of root certificates for HTTPS server verifications
